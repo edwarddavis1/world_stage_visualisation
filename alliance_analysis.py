@@ -9,6 +9,10 @@ import nodevectors
 import umap
 
 pio.renderers.default = "notebook_connected"
+
+"""
+Countries like "The Bahamas" and "Bahamas" are treated separately - fix this!
+"""
 # %% [markdowningdom]
 # Read in data
 # %%
@@ -41,9 +45,18 @@ alliance_df["Countries"] = alliance_list_list
 country_df = pd.read_csv("country_sizes.csv")
 country_df["name"] = country_df["name"].replace(
     {"DR Congo": "Democratic Republic of the Congo"})
+country_df["name"] = country_df["name"].replace(
+    {"Bahamas": "The Bahamas"})
+country_df["name"] = country_df["name"].replace(
+    {"St. Lucia": "Saint Lucia"})
+country_df["name"] = country_df["name"].replace(
+    {"St. Vincent and the Grenadines": "Saint Vincent and the Grenadines"})
+country_df["name"] = country_df["name"].replace(
+    {"The Gambia": "Gambia"})
 
 # gdp
 # source: https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
+# Source for taiwan: https://www.statista.com/statistics/727589/gross-domestic-product-gdp-in-taiwan/#:~:text=In%202020%2C%20Taiwan's%20gross%20domestic,around%20668.16%20billion%20U.S.%20dollars.
 # Note that the most recent year of gdp is not 2022 - but we are including alliances from 2022
 # gdp_df = pd.read_csv("API_NY.GDP.MKTP.CD_DS2_en_csv_v2_4019306.csv", skiprows=[0,1,2,3])
 gdp_df = pd.read_csv("country_most_recent_gdp.txt",
@@ -55,10 +68,10 @@ gdp_df = gdp_df[["Country", "Most Recent Year", "GDP"]]
 # source: https://en.m.wikipedia.org/wiki/Member_states_of_NATO
 nato_df = pd.read_csv("nato.txt", header=None, names=["Country"])
 
-# Check country names
-for country in countries:
-    if country not in coords_df["name"].values:
-        print(country)
+# # Check country names
+# for country in countries:
+#     if country not in coords_df["name"].values:
+#         print(country)
 
 # Country coordinates
 # source: https://developers.google.com/public-data/docs/canonical/countries_csv
@@ -85,13 +98,22 @@ for prog, connected_countries in enumerate(alliance_list_list):
             A[country_id[country], country_id[other_country]] += 1
 # %%
 # THESE NEED TO BE DEALT WITH!
-populations = []
+# populations = []
+# for country in countries:
+#     try:
+#         populations.append(country_df[country_df["name"]
+#                                       == country]["pop2022"].values[0])
+#     except:
+#         populations.append(0)
+#         print(country)
+
+gdps = []
 for country in countries:
     try:
-        populations.append(country_df[country_df["name"]
-                                      == country]["pop2022"].values[0])
+        gdps.append(gdp_df[gdp_df["Country"]
+                           == country]["GDP"].values[0])
     except:
-        populations.append(0)
+        gdps.append(0)
         print(country)
 # %%
 # THESE NEED TO BE DEALT WITH!
@@ -161,13 +183,37 @@ xadf["NATO Membership"] = np.where(
     np.isin(countries, nato_df["Country"]), "Yes", "No")
 xadf["Latitude"] = lats
 xadf["Longitude"] = lons
-xadf = xadf[xadf["Latitude"] != None]
-
+xadf["GDP"] = gdps
+xadf = xadf[xadf["GDP"] != None]
+xadf["GDP"] = xadf["GDP"].astype(float)
+xadf = xadf[xadf["GDP"] > 0]
+# xadf = xadf[xadf["GDP"] > np.mean(xadf["GDP"].values)]
+# xadf["GDP"] = np.sqrt(xadf["GDP"])
 
 fig = px.scatter(xadf, x="Dimension 1", y="Dimension 2",
-                 color="Country",
+                 #   color="Country",
                  #   color="NATO Membership",
+                 size="GDP",
                  )
+# fig.update_traces(marker=dict(size=12,
+#                               line=dict(width=2,
+#                                         color=(np.where(xadf["NATO Membership"].values == "Yes", 'DarkSlateGrey', 'White'))),
+#                   selector=dict(mode='markers'))
+fig.update_traces(marker=dict(line=dict(width=1.5, color=np.where(
+    xadf["NATO Membership"].values == "Yes", "darkslateblue", "white"))))
+# fig.update_layout(
+#     xaxis=dict(
+#         title="",
+#         linecolor="white",  # Sets color of X-axis line
+#         showgrid=False  # Removes X-axis grid lines
+#     ),
+#     yaxis=dict(
+#         title="",
+#         linecolor="white",  # Sets color of Y-axis line
+#         showgrid=False,  # Removes Y-axis grid lines
+#     ),
+#
+# )
 fig.show()
 # %% [markdown]
 # Poking
