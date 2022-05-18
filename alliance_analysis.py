@@ -53,8 +53,16 @@ gdp_df = gdp_df[["Country", "Most Recent Year", "GDP"]]
 
 # NATO
 # source: https://en.m.wikipedia.org/wiki/Member_states_of_NATO
-nato_df = pd.read_csv("nato.txt")
+nato_df = pd.read_csv("nato.txt", header=None, names=["Country"])
 
+# Check country names
+for country in countries:
+    if country not in coords_df["name"].values:
+        print(country)
+
+# Country coordinates
+# source: https://developers.google.com/public-data/docs/canonical/countries_csv
+coords_df = pd.read_csv("country_coordinates.txt", delimiter="\t")
 
 # %% [markdown]
 # Convert to adjacency matrix
@@ -87,13 +95,24 @@ for country in countries:
         print(country)
 # %%
 # THESE NEED TO BE DEALT WITH!
-gdps = []
+lats = []
 for country in countries:
     try:
-        gdps.append(gdp_df[gdp_df["Country"] == country]["GDP"].values[0])
+        lats.append(coords_df[coords_df["name"] ==
+                              country]["latitude"].values[0])
     except:
         print(country)
-        gdps.append(0)
+        lats.append(None)
+
+lons = []
+for country in countries:
+    try:
+        lons.append(coords_df[coords_df["name"] ==
+                              country]["longitude"].values[0])
+    except:
+        print(country)
+        lons.append(None)
+
 # %% [markdown]
 # Compute spectral embedding
 # %%
@@ -105,7 +124,7 @@ for country in countries:
 n2v_obj = nodevectors.Node2Vec(n_components=25)
 xa = n2v_obj.fit_transform(A)
 xa_pca = PCA(n_components=8).fit_transform(xa)
-# xa_umap = umap.UMAP(n_components=2).fit_transform(xa_pca)
+xa_umap = umap.UMAP(n_components=2).fit_transform(xa_pca)
 
 # # Construct (regularised) Laplacian matrix
 # L = to_laplacian(A, regulariser=10000)
@@ -135,16 +154,19 @@ xa_pca = PCA(n_components=8).fit_transform(xa)
 # xa = np.vstack(degree_corrected_ya_vecs)
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 # %%
-xadf = pd.DataFrame(xa_umap)
+xadf = pd.DataFrame(xa_pca)
 xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
 xadf["Country"] = countries
-# xadf["2022 Population"] = populations
-# xadf = xadf[xadf["2022 Population"] > 0]
-# xadf["GDP"] = gdps
+xadf["NATO Membership"] = np.where(
+    np.isin(countries, nato_df["Country"]), "Yes", "No")
+xadf["Latitude"] = lats
+xadf["Longitude"] = lons
+xadf = xadf[xadf["Latitude"] != None]
+
 
 fig = px.scatter(xadf, x="Dimension 1", y="Dimension 2",
                  color="Country",
-                 #  size="2022 Population",
+                 #   color="NATO Membership",
                  )
 fig.show()
 # %% [markdown]
