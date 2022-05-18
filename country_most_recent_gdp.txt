@@ -1,0 +1,248 @@
+Afghanistan	2020	20,116.14	
+Albania	2020	14,887.63	
+Algeria	2020	145,009.18	
+American Samoa	2020	709.00	
+Andorra	2019	3,155.07	
+Angola	2020	58,375.98	
+Antigua and Barbuda	2020	1,370.28	
+Argentina	2020	389,288.06	
+Armenia	2020	12,641.21	
+Aruba	2018	3,202.19	
+Australia	2020	1,327,836.17	
+Austria	2020	433,258.47	
+Azerbaijan	2020	42,607.18	
+Bahamas, The	2020	9,907.50	
+Bahrain	2020	34,729.23	
+Bangladesh	2020	323,056.96	
+Barbados	2020	4,418.00	
+Belarus	2020	60,258.24	
+Belgium	2020	521,861.29	
+Belize	2020	1,636.28	
+Benin	2020	15,651.55	
+Bermuda	2020	6,842.70	
+Bhutan	2020	2,315.44	
+Bolivia	2020	36,572.76	
+Bosnia and Herzegovina	2020	19,946.50	
+Botswana	2020	15,061.92	
+Brazil	2020	1,444,733.26	
+British Virgin Islands			
+Brunei Darussalam	2020	12,005.83	
+Bulgaria	2020	69,889.35	
+Burkina Faso	2020	17,933.61	
+Burundi	2020	2,841.79	
+Cabo Verde	2020	1,703.70	
+Cambodia	2020	25,808.56	
+Cameroon	2020	40,804.45	
+Canada	2020	1,645,423.41	
+Cayman Islands	2020	5,591.62	
+Central African Republic	2020	2,380.09	
+Chad	2020	10,829.08	
+Channel Islands	2007	11,514.61	
+Chile	2020	252,940.02	
+China	2020	14,722,730.70	
+Colombia	2020	271,437.60	
+Comoros	2020	1,235.40	
+Congo, Dem. Rep.	2020	48,716.96	
+Congo, Rep.	2020	10,187.12	
+Costa Rica	2020	61,846.90	
+Cote d'Ivoire	2020	61,348.58	
+Croatia	2020	57,203.78	
+Cuba	2020	107,352.00	
+Curacao	2020	2,595.82	
+Cyprus	2020	24,612.65	
+Czech Republic	2020	245,339.32	
+Denmark	2020	356,084.87	
+Djibouti	2020	3,384.39	
+Dominica	2020	504.21	
+Dominican Republic	2020	78,844.70	
+Ecuador	2020	98,808.01	
+Egypt, Arab Rep.	2020	365,252.65	
+El Salvador	2020	24,638.72	
+Equatorial Guinea	2020	10,021.86	
+Eritrea	2011	2,065.00	
+Estonia	2020	30,650.29	
+Eswatini	2020	3,972.73	
+Ethiopia	2020	107,645.05	
+Faroe Islands	2019	3,126.29	
+Fiji	2020	4,533.88	
+Finland	2020	269,594.83	
+France	2020	2,630,317.73	
+French Polynesia	2000	3,447.54	
+Gabon	2020	15,316.83	
+Gambia, The	2020	1,868.09	
+Georgia	2020	15,846.49	
+Germany	2020	3,846,413.93	
+Ghana	2020	68,532.28	
+Gibraltar			
+Greece	2020	188,835.20	
+Greenland	2019	2,982.25	
+Grenada	2020	1,042.10	
+Guam	2020	5,844.00	
+Guatemala	2020	77,604.63	
+Guinea	2020	15,681.05	
+Guinea-Bissau	2020	1,431.76	
+Guyana	2020	5,471.26	
+Haiti	2020	14,508.22	
+Honduras	2020	23,662.23	
+Hong Kong SAR, China	2020	346,585.88	
+Hungary	2020	155,808.44	
+Iceland	2020	21,718.08	
+India	2020	2,660,245.25	
+Indonesia	2020	1,058,423.84	
+Iran, Islamic Rep.	2020	203,471.30	
+Iraq	2020	166,756.98	
+Ireland	2020	425,888.95	
+Isle of Man	2019	7,315.39	
+Israel	2020	407,100.74	
+Italy	2020	1,888,709.44	
+Jamaica	2020	13,812.43	
+Japan	2020	5,057,758.96	
+Jordan	2020	43,697.66	
+Kazakhstan	2020	171,082.38	
+Kenya	2020	101,013.73	
+Kiribati	2020	197.51	
+Korea, Dem. People's Rep.			
+Korea, Rep.	2020	1,637,895.80	
+Kosovo	2020	7,716.93	
+Kuwait	2020	105,960.23	
+Kyrgyz Republic	2020	7,735.98	
+Lao PDR	2020	19,132.64	
+Latvia	2020	33,707.32	
+Lebanon	2020	31,735.22	
+Lesotho	2020	1,875.23	
+Liberia	2020	3,201.19	
+Libya	2020	25,418.92	
+Liechtenstein	2019	6,684.44	
+Lithuania	2020	56,546.96	
+Luxembourg	2020	73,353.13	
+Macao SAR, China	2020	25,586.11	
+Madagascar	2020	13,056.08	
+Malawi	2020	12,182.35	
+Malaysia	2020	337,006.07	
+Maldives	2020	3,742.77	
+Mali	2020	17,465.39	
+Malta	2020	14,647.38	
+Marshall Islands	2020	244.46	
+Mauritania	2020	7,913.68	
+Mauritius	2020	10,920.61	
+Mexico	2020	1,073,915.88	
+Micronesia, Fed. Sts.	2020	410.08	
+Moldova	2020	11,915.55	
+Monaco	2020	6,816.22	
+Mongolia	2020	13,312.98	
+Montenegro	2020	4,769.86	
+Morocco	2020	114,725.07	
+Mozambique	2020	14,019.45	
+Myanmar	2020	79,852.05	
+Namibia	2020	10,619.19	
+Nauru	2020	114.63	
+Nepal	2020	33,657.18	
+Netherlands	2020	913,865.40	
+New Caledonia	2019	9,438.13	
+New Zealand	2020	210,700.85	
+Nicaragua	2020	12,621.51	
+Niger	2020	13,741.38	
+Nigeria	2020	432,293.78	
+North Macedonia	2020	12,263.71	
+Northern Mariana Islands	2019	1,182.00	
+Norway	2020	362,198.32	
+Oman	2020	73,971.39	
+Pakistan	2020	262,610.00	
+Palau	2020	257.70	
+Panama	2020	53,977.04	
+Papua New Guinea	2020	24,668.90	
+Paraguay	2020	35,670.30	
+Peru	2020	202,014.36	
+Philippines	2020	361,489.33	
+Poland	2020	596,624.36	
+Portugal	2020	228,539.25	
+Puerto Rico	2020	103,138.30	
+Qatar	2020	144,411.36	
+Romania	2020	248,715.55	
+Russian Federation	2020	1,483,497.78	
+Rwanda	2020	10,333.99	
+Samoa	2020	807.10	
+San Marino	2019	1,616.37	
+Sao Tome and Principe	2020	472.91	
+Saudi Arabia	2020	700,117.87	
+Senegal	2020	24,644.23	
+Serbia	2020	53,335.02	
+Seychelles	2020	1,059.89	
+Sierra Leone	2020	4,063.29	
+Singapore	2020	339,998.48	
+Sint Maarten (Dutch part)	2018	1,185.47	
+Slovak Republic	2020	105,172.56	
+Slovenia	2020	53,589.61	
+Solomon Islands	2020	1,545.89	
+Somalia	2020	6,965.29	
+South Africa	2020	335,442.10	
+South Sudan	2015	11,997.80	
+Spain	2020	1,281,484.64	
+Sri Lanka	2020	80,676.68	
+St. Kitts and Nevis	2020	980.74	
+St. Lucia	2020	1,616.77	
+St. Martin (French part)			
+St. Vincent and the Grenadines	2020	807.47	
+Sudan	2020	21,329.11	
+Suriname	2020	2,884.25	
+Sweden	2020	541,220.06	
+Switzerland	2020	752,248.05	
+Syrian Arab Republic	2019	22,777.88	
+Tajikistan	2020	8,194.15	
+Tanzania	2020	62,409.71	
+Thailand	2020	501,643.65	
+Timor-Leste	2020	1,902.16	
+Togo	2020	7,574.64	
+Tonga	2020	488.83	
+Trinidad and Tobago	2020	21,588.04	
+Tunisia	2020	41,620.35	
+Turkey	2020	719,954.82	
+Turkmenistan	2019	45,231.43	
+Turks and Caicos Islands	2020	924.58	
+Tuvalu	2020	48.86	
+Uganda	2020	37,600.37	
+Ukraine	2020	155,498.99	
+United Arab Emirates	2020	358,868.77	
+United Kingdom	2020	2,759,804.06	
+United States	2020	20,953,030.00	
+Uruguay	2020	53,628.83	
+Uzbekistan	2020	59,929.95	
+Vanuatu	2020	881.55	
+Venezuela, RB	2014	482,359.32	
+Vietnam	2020	271,158.44	
+Virgin Islands (U.S.)	2019	4,068.00	
+West Bank and Gaza	2020	15,561.30	
+Yemen, Rep.	2018	21,606.14	
+Zambia	2020	18,110.63	
+Zimbabwe	2020	18,051.17	
+World	2020	84,746,978.78	
+Arab World	2020	2,447,584.45	
+Caribbean small states	2020	66,039.33	
+Central Europe and the Baltics	2020	1,653,247.53	
+East Asia & Pacific	2020	27,097,404.94	
+East Asia & Pacific (excluding high income)	2020	17,448,894.60	
+Euro area	2020	13,021,049.03	
+Europe & Central Asia	2020	22,121,578.72	
+Europe & Central Asia (excluding high income)	2020	3,222,403.62	
+European Union	2020	15,291,934.75	
+Fragile and conflict affected situations	2020	1,508,644.84	
+Heavily indebted poor countries (HIPC)	2020	797,697.29	
+Latin America & Caribbean	2020	4,725,519.82	
+Latin America & Caribbean (excluding high income)	2020	4,035,270.95	
+Least developed countries: UN classification	2020	1,113,396.64	
+Middle East & North Africa	2020	3,035,580.43	
+Middle East & North Africa (excluding high income)	2020	1,195,745.98	
+North America	2020	22,605,296.11	
+OECD members	2020	52,392,675.69	
+Other small states	2020	375,853.31	
+Pacific island small states	2020	9,530.49	
+Small states	2020	451,423.67	
+South Asia	2020	3,386,420.41	
+Sub-Saharan Africa	2020	1,705,379.93	
+Sub-Saharan Africa (excluding high income)	2020	1,704,320.05	
+High income	2020	53,461,077.01	
+Low & middle income	2020	30,993,151.08	
+Low income	2020	459,729.95	
+Lower middle income	2020	7,384,772.40	
+Middle income	2020	30,535,343.46	
+Upper middle income	2020	23,150,665.56

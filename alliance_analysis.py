@@ -1,0 +1,163 @@
+# %%
+from sklearn.decomposition import PCA
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.io as pio
+import nodevectors
+import umap
+
+pio.renderers.default = "notebook_connected"
+# %% [markdowningdom]
+# Read in data
+# %%
+# Alliance data
+# source: https://en.m.wikipedia.org/wiki/List_of_military_alliances
+# note: I have removed new zealand from the ANZUS alliance as it is "paritally suspended"
+# I have replaced each occurance of "UK" and "USA" to "United Kingdom" and "United States" - as the dataset seems to use both.
+# Similar with "UAE"
+# Changed "Czechia" to "Czech Republic"
+# "Cabo Verde" to "Cape Verde"
+textfile = open("raw_wiki_alliance_data.txt", "r")
+lines = textfile.readlines()
+deli = "•"
+alliance_name_list = []
+alliance_list_list = []
+for line in lines:
+    if deli in line:
+        alliance_name_list.append(line[0:line.find('\t')])
+        alliance_list = [country.strip()
+                         for country in line[line.find('\t') + 2: -1].split(deli)]
+        alliance_list_list.append(alliance_list)
+
+alliance_df = pd.DataFrame()
+alliance_df["Alliance"] = alliance_name_list
+alliance_df["Countries"] = alliance_list_list
+
+# Country data
+# source: https://worldpopulationreview.com/countries
+# "DR Congo" to "Democratic Republic of the Congo"
+country_df = pd.read_csv("country_sizes.csv")
+country_df["name"] = country_df["name"].replace(
+    {"DR Congo": "Democratic Republic of the Congo"})
+
+# gdp
+# source: https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
+# Note that the most recent year of gdp is not 2022 - but we are including alliances from 2022
+# gdp_df = pd.read_csv("API_NY.GDP.MKTP.CD_DS2_en_csv_v2_4019306.csv", skiprows=[0,1,2,3])
+gdp_df = pd.read_csv("country_most_recent_gdp.txt",
+                     delimiter="\t", header=None)
+gdp_df.columns = ["Country", "Most Recent Year", "GDP", "None"]
+gdp_df = gdp_df[["Country", "Most Recent Year", "GDP"]]
+
+# NATO
+# source: https://en.m.wikipedia.org/wiki/Member_states_of_NATO
+nato_df = pd.read_csv("nato.txt")
+
+
+# %% [markdown]
+# Convert to adjacency matrix
+# %%
+# Get list of all countries
+countries_with_dups = [
+    item for subitem in alliance_list_list for item in subitem]
+countries = list(set(countries_with_dups))
+countries.sort()
+country_id = {country: i for i, country in enumerate(countries)}
+id_country = {i: country for i, country in enumerate(countries)}
+n = len(countries)
+
+A = np.zeros((n, n))
+for prog, connected_countries in enumerate(alliance_list_list):
+    for country in connected_countries:
+        connected_countries_copy = connected_countries.copy()
+        connected_countries_copy.remove(country)
+        for other_country in connected_countries_copy:
+            A[country_id[country], country_id[other_country]] += 1
+# %%
+# THESE NEED TO BE DEALT WITH!
+populations = []
+for country in countries:
+    try:
+        populations.append(country_df[country_df["name"]
+                                      == country]["pop2022"].values[0])
+    except:
+        populations.append(0)
+        print(country)
+# %%
+# THESE NEED TO BE DEALT WITH!
+gdps = []
+for country in countries:
+    try:
+        gdps.append(gdp_df[gdp_df["Country"] == country]["GDP"].values[0])
+    except:
+        print(country)
+        gdps.append(0)
+# %% [markdown]
+# Compute spectral embedding
+# %%
+# u, s, vt = np.linalg.svd(A)
+# d = 10
+# xa = u[:, 0:d] @ np.diag(np.sqrt(s[0:d]))
+# xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
+
+n2v_obj = nodevectors.Node2Vec(n_components=25)
+xa = n2v_obj.fit_transform(A)
+xa_pca = PCA(n_components=8).fit_transform(xa)
+# xa_umap = umap.UMAP(n_components=2).fit_transform(xa_pca)
+
+# # Construct (regularised) Laplacian matrix
+# L = to_laplacian(A, regulariser=10000)
+
+# # Compute spectral embedding
+# L_vals, L_vecs = sparse.linalg.eigs(L, d*2 + 2)
+# idx = np.abs(L_vals).argsort()[::-1]
+# L_vals = L_vals[idx]
+# L_vecs = np.real(L_vecs[:, idx])
+
+# # Remove lamda = 1 eigenvalues (as Laplacian matrices always have these, dilation means there are two)
+# U = np.real(L_vecs[:, 0::2][:, 1:])
+# S = np.diag(abs(L_vals[0::2][1:]))
+# embedding = U @ LA.sqrtm(S)
+
+# # Divide by sqrt of node degree
+# degree_corrected_ya_vecs = []
+# degree = np.reshape(np.asarray(A.sum(axis=0)), (-1,))
+# for i in range(degree.shape[0]):
+#     if degree[i] > 10e-8:
+#         degree_corrected_ya_vecs.append(
+#             np.divide(embedding[i, :], np.sqrt(degree[i])))
+#     else:
+#         degree_corrected_ya_vecs.append(
+#             np.zeros(embedding[i, :].shape))
+
+# xa = np.vstack(degree_corrected_ya_vecs)
+# xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
+# %%
+xadf = pd.DataFrame(xa_umap)
+xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
+xadf["Country"] = countries
+# xadf["2022 Population"] = populations
+# xadf = xadf[xadf["2022 Population"] > 0]
+# xadf["GDP"] = gdps
+
+fig = px.scatter(xadf, x="Dimension 1", y="Dimension 2",
+                 color="Country",
+                 #  size="2022 Population",
+                 )
+fig.show()
+# %% [markdown]
+# Poking
+# %%
+n2v_obj = nodevectors.Node2Vec(n_components=3)
+xa = n2v_obj.fit_transform(A)
+
+xadf = pd.DataFrame(xa)
+xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
+xadf["Country"] = countries
+fig = px.scatter_3d(xadf, x="Dimension 1", y="Dimension 2", z="Dimension 3",
+                    color="Country",
+                    )
+fig.show()
+# %%
