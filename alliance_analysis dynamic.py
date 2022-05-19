@@ -31,7 +31,7 @@ country_corrections_dict = {"Bahamas": "The Bahamas", "St. Lucia": "Saint Lucia"
 # Similar with "UAE"
 # Changed "Czechia" to "Czech Republic"
 # "Cabo Verde" to "Cape Verde"
-textfile = open("raw_wiki_alliance_data.txt", "r")
+textfile = open("raw_wiki_alliance_data_pre_2022.txt", "r")
 lines = textfile.readlines()
 deli = "•"
 alliance_name_list = []
@@ -67,8 +67,6 @@ country_df["name"] = country_df["name"].replace(
     {"St. Vincent and the Grenadines": "Saint Vincent and the Grenadines"})
 country_df["name"] = country_df["name"].replace(
     {"The Gambia": "Gambia"})
-country_df["name"] = country_df["name"].replace(
-    {"Saint Kitts and Nevis": "St. Kitts and Nevis"})
 
 # gdp
 # source: https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
@@ -116,21 +114,7 @@ region_df.columns = ["Country", "Region", "Continent"]
 
 # Religion
 # source: https://worldpopulationreview.com/country-rankings/religion-by-country
-# Note this is as of 2010
-religion_df_raw = pd.read_csv("country_by_religion.csv")
-religions = religion_df_raw.columns[1:]
-most_popular_religion = []
-population_most_popular_religion = []
-for country in religion_df_raw["country"]:
-    most_popular_religion_idx = np.argmax(
-        religion_df_raw[religion_df_raw["country"] == country].values[0][1:])
-    most_popular_religion.append(religions[most_popular_religion_idx])
-    population_most_popular_religion.append(
-        religion_df_raw[religion_df_raw["country"] == country][religions[most_popular_religion_idx]].values[0])
-
-religion_df = religion_df_raw.copy()
-religion_df["Most Popular Religion"] = most_popular_religion
-religion_df["Population with Most Popular Religion"] = population_most_popular_religion
+religion_df = pd.read_csv("country_by_religion.csv")
 
 # %% [markdown]
 # Convert to adjacency matrirx
@@ -164,40 +148,6 @@ for country in countries:
     except:
         gdps.append(0)
         print(country)
-
-# %%
-pops = []
-for country in countries:
-    try:
-        pops.append(country_df[country_df["name"] ==
-                               country]["pop2022"].values[0])
-    except:
-        # if country == "Taiwan":
-        #     pops.append("Not in UN")
-        # elif country == "Palestine":
-        #     pops.append("Not in UN")
-        # else:
-        print(country)
-        # pops.append(None)
-# %%
-
-most_popular_religion = []
-population_popular_religion = []
-for country in countries:
-    try:
-        most_popular_religion.append(religion_df[religion_df["country"] ==
-                                                 country]["Most Popular Religion"].values[0])
-        # Population figures are in thousands of people
-        population_popular_religion.append(religion_df[religion_df["country"] ==
-                                                       country]["Population with Most Popular Religion"].values[0] / 1000)
-    except:
-        print(country)
-        most_popular_religion.append("No Data")
-        population_popular_religion.append(0)
-
-# percentage_population_with_religion = np.array(
-#     population_popular_religion) / np.array(pops)
-
 # %%
 un_votes = []
 for country in countries:
@@ -235,6 +185,7 @@ for country in countries:
             regions.append(None)
             continents.append(None)
 
+
 # %% [markdown]
 # Compute spectral embedding
 # %%
@@ -243,15 +194,13 @@ for country in countries:
 # xa = u[:, 0:d] @ np.diag(np.sqrt(s[0:d]))
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
-# p = 2
-# q = 0.5
 p = 1
 q = 1
 n2v_obj = nodevectors.Node2Vec(
     n_components=25,
     return_weight=1/p,
     neighbor_weight=1/q,
-    epochs=50,
+    epochs=500,
     walklen=100,
     w2vparams={"window": 10, "negative": 5, "iter": 10,
                "batch_words": 128}
@@ -323,7 +272,7 @@ xa_pca = PCA(n_components=8).fit_transform(xa)
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
 # %%
-xadf = pd.DataFrame(xa_pca)
+xadf = pd.DataFrame(xa)
 xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
 xadf["Country"] = countries
 xadf["NATO Membership"] = np.where(
@@ -344,8 +293,6 @@ for alliance in alliance_list_list:
             num_alliances[country_id[country]] += 1
 
 xadf["Number of Alliances"] = num_alliances
-
-xadf["Dominant Religion"] = most_popular_religion
 
 # # Combined GDP of all allies (essentially who has the most powerful allies)
 # comb_gdp_of_allies = np.zeros((n, ))
@@ -372,15 +319,13 @@ xadf["Number of Allies"] = num_allied_countries
 xadf = xadf.sort_values(by=["GDP", "Country"], ascending=False)
 
 
-# xadf.to_csv("xa_50_epoch_df.csv")
+# xadf.to_csv(".csv")
 
 fig = px.scatter(xadf, x="Dimension 1", y="Dimension 2",
-                #   color="NATO Membership",
-                 #    color="UN Vote on Ukraine",
+                 #    color="NATO Membership",
+                 #   color="UN Vote on Ukraine",
                  color="Continent",
-                 #  color="Dominant Religion",
-                 # color="Country",
-                 #  text="Country",
+                 #    color="Country",
                  #  #  size="Combined GDP of Allies",
                  # #  size="Number of Allies",
                  size="GDP",
@@ -398,8 +343,7 @@ fig.update_traces(marker=dict(
     #   sizeref=2. * \
     #   max(xadf["Combined GDP of Allies"])/(160. ** 2),
     #   sizemin=4,
-),
-    textposition="top center",
+)
 )
 fig.update_layout(
     xaxis=dict(
