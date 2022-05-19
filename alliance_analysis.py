@@ -243,15 +243,15 @@ for country in countries:
 # xa = u[:, 0:d] @ np.diag(np.sqrt(s[0:d]))
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
-# p = 2
-# q = 0.5
-p = 1
-q = 1
+p = 2
+q = 0.5
+# p = 1
+# q = 1
 n2v_obj = nodevectors.Node2Vec(
     n_components=25,
     return_weight=1/p,
     neighbor_weight=1/q,
-    epochs=50,
+    epochs=5000,
     walklen=100,
     w2vparams={"window": 10, "negative": 5, "iter": 10,
                "batch_words": 128}
@@ -375,7 +375,7 @@ xadf = xadf.sort_values(by=["GDP", "Country"], ascending=False)
 # xadf.to_csv("xa_50_epoch_df.csv")
 
 fig = px.scatter(xadf, x="Dimension 1", y="Dimension 2",
-                #   color="NATO Membership",
+                 #   color="NATO Membership",
                  #    color="UN Vote on Ukraine",
                  color="Continent",
                  #  color="Dominant Religion",
