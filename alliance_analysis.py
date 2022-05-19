@@ -243,10 +243,10 @@ for country in countries:
 # xa = u[:, 0:d] @ np.diag(np.sqrt(s[0:d]))
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
-p = 2
-q = 0.5
-# p = 1
-# q = 1
+# p = 2
+# q = 0.5
+p = 1
+q = 1
 n2v_obj = nodevectors.Node2Vec(
     n_components=25,
     return_weight=1/p,
@@ -323,53 +323,54 @@ xa_pca = PCA(n_components=8).fit_transform(xa)
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
 # %%
-xadf = pd.DataFrame(xa_pca)
-xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
-xadf["Country"] = countries
-xadf["NATO Membership"] = np.where(
-    np.isin(countries, nato_df["Country"]), "Yes", "No")
+# # xadf = pd.DataFrame(xa_pca)
+xadf = pd.read_csv("final_xadf.csv")
+# xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
+# xadf["Country"] = countries
+# xadf["NATO Membership"] = np.where(
+#     np.isin(countries, nato_df["Country"]), "Yes", "No")
 
-# Use estimated gdp for north korea (estimated by the bank of south korea)
-xadf["GDP"] = np.nan_to_num(gdps, nan=28500.)
-xadf["Is GDP Estimate"] = np.where(
-    xadf["Country"] == "North Korea", True, False)
-xadf["UN Vote on Ukraine"] = un_votes
-xadf["Continent"] = continents
+# # Use estimated gdp for north korea (estimated by the bank of south korea)
+# xadf["GDP"] = np.nan_to_num(gdps, nan=28500.)
+# xadf["Is GDP Estimate"] = np.where(
+#     xadf["Country"] == "North Korea", True, False)
+# xadf["UN Vote on Ukraine"] = un_votes
+# xadf["Continent"] = continents
 
-# Number of alliances
-num_alliances = np.zeros((n,))
-for alliance in alliance_list_list:
-    for country in xadf["Country"]:
-        if country in alliance:
-            num_alliances[country_id[country]] += 1
+# # Number of alliances
+# num_alliances = np.zeros((n,))
+# for alliance in alliance_list_list:
+#     for country in xadf["Country"]:
+#         if country in alliance:
+#             num_alliances[country_id[country]] += 1
 
-xadf["Number of Alliances"] = num_alliances
+# xadf["Number of Alliances"] = num_alliances
 
-xadf["Dominant Religion"] = most_popular_religion
+# xadf["Dominant Religion"] = most_popular_religion
 
-# # Combined GDP of all allies (essentially who has the most powerful allies)
-# comb_gdp_of_allies = np.zeros((n, ))
+# # # Combined GDP of all allies (essentially who has the most powerful allies)
+# # comb_gdp_of_allies = np.zeros((n, ))
+# # for country in xadf["Country"].values:
+# #     list_of_allies = np.where(A[country_id[country], :] > 0)[0]
+# #     if gdps[country_id[country]] != None and gdps[country_id[country]] > 0:
+# #         comb_gdp_of_allies[country_id[country]] += gdps[country_id[country]]
+
+# # # Also add their own gdp
+# # for country in xadf["Country"].values:
+# #     comb_gdp_of_allies[country_id[country]] += gdps[country_id[country]]
+
+# # xadf["Combined GDP of Allies"] = comb_gdp_of_allies
+
+# xadf["GDP"] = xadf["GDP"].astype(float)
+# xadf["GDP"] = np.sqrt(xadf["GDP"])
+
+# # Number of allied countries
+# num_allied_countries = []
 # for country in xadf["Country"].values:
-#     list_of_allies = np.where(A[country_id[country], :] > 0)[0]
-#     if gdps[country_id[country]] != None and gdps[country_id[country]] > 0:
-#         comb_gdp_of_allies[country_id[country]] += gdps[country_id[country]]
+#     num_allied_countries.append(sum(A[country_id[country], :]))
+# xadf["Number of Allies"] = num_allied_countries
 
-# # Also add their own gdp
-# for country in xadf["Country"].values:
-#     comb_gdp_of_allies[country_id[country]] += gdps[country_id[country]]
-
-# xadf["Combined GDP of Allies"] = comb_gdp_of_allies
-
-xadf["GDP"] = xadf["GDP"].astype(float)
-xadf["GDP"] = np.sqrt(xadf["GDP"])
-
-# Number of allied countries
-num_allied_countries = []
-for country in xadf["Country"].values:
-    num_allied_countries.append(sum(A[country_id[country], :]))
-xadf["Number of Allies"] = num_allied_countries
-
-xadf = xadf.sort_values(by=["GDP", "Country"], ascending=False)
+# xadf = xadf.sort_values(by=["GDP", "Country"], ascending=False)
 
 
 # xadf.to_csv("xa_50_epoch_df.csv")
