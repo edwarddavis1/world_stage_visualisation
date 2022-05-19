@@ -69,7 +69,7 @@ Finland	2020	269594.83
 France	2020	2630317.73	
 French Polynesia	2000	3447.54	
 Gabon	2020	15316.83	
-The Gambia The	2020	1868.09	
+Gambia	2020	1868.09	
 Georgia	2020	15846.49	
 Germany	2020	3846413.93	
 Ghana	2020	68532.28	
@@ -149,6 +149,7 @@ Norway	2020	362198.32
 Oman	2020	73971.39	
 Pakistan	2020	262610.00	
 Palau	2020	257.70	
+Palestine	2020	15560.00
 Panama	2020	53977.04	
 Papua New Guinea	2020	24668.90	
 Paraguay	2020	35670.30	
