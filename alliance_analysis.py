@@ -421,14 +421,36 @@ fig.show(renderer="browser")
 # %% [markdown]
 # Poking
 # %%
-n2v_obj = nodevectors.Node2Vec(n_components=3)
-xa = n2v_obj.fit_transform(A)
-
-xadf = pd.DataFrame(xa)
-xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
-xadf["Country"] = countries
-fig = px.scatter_3d(xadf, x="Dimension 1", y="Dimension 2", z="Dimension 3",
-                    color="Country",
-                    )
-fig.show()
+south_america_df = xadf[(xadf["Dimension 1"] > 7) & (xadf["Dimension 2"] > 13)]
+plotly_default_colours = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA',
+                          '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
+south_america_df = south_america_df.sort_values(by=["GDP"], ascending=False)
+bar = px.bar(south_america_df, x="Country", y="GDP",
+             #  color="Continent",
+             #  color_discrete_sequence=[
+             #  plotly_default_colours[0], plotly_default_colours[3]],
+             )
+bar.show()
+# %%
+europe_df = xadf[(xadf["Dimension 1"] > 9) & (xadf["Dimension 2"] < -9)]
+plotly_default_colours = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA',
+                          '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
+europe_df = europe_df.sort_values(by=["GDP"], ascending=False)
+bar = px.bar(europe_df, x="Country", y="GDP",
+             #  color="Continent",
+             #  color_discrete_sequence=[
+             #  plotly_default_colours[0], plotly_default_colours[3]],
+             )
+bar.show()
+# %%
+pacific_df = xadf[(xadf["Dimension 2"] < 7) & (xadf["Dimension 2"] > 4)]
+plotly_default_colours = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA',
+                          '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
+pacific_df = pacific_df.sort_values(by=["GDP"], ascending=False)
+bar = px.bar(pacific_df, x="Country", y="GDP",
+             #  color="Continent",
+             #  color_discrete_sequence=[
+             #  plotly_default_colours[0], plotly_default_colours[3]],
+             )
+bar.show()
 # %%
