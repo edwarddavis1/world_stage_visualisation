@@ -12,14 +12,13 @@ import umap
 
 pio.renderers.default = "notebook_connected"
 
-"""
-Countries like "The Bahamas" and "Bahamas" are treated separately - fix this!
-"""
 # %% [markdowningdom]
 # Read in data
 # %%
+# Based on UN
 countries_to_remove = ["Donetsk People's Republic", "Hezbollah", "Lebanon ( Hezbollah)",
                        "Lugansk People's Republic", "Venezuela (Guaido government)", "Western Sahara"]
+# For labelling consistency
 country_corrections_dict = {"Bahamas": "The Bahamas", "St. Lucia": "Saint Lucia",
                             "St. Vincent and the Grenadines": "Saint Vincent and the Grenadines",
                             "The Gambia": "Gambia", }
@@ -195,8 +194,6 @@ for country in countries:
         most_popular_religion.append("No Data")
         population_popular_religion.append(0)
 
-# percentage_population_with_religion = np.array(
-#     population_popular_religion) / np.array(pops)
 
 # %%
 un_votes = []
@@ -236,13 +233,15 @@ for country in countries:
             continents.append(None)
 
 # %% [markdown]
-# Compute spectral embedding
+# Compute graph embedding
 # %%
+# Spectral embedding
 # u, s, vt = np.linalg.svd(A)
 # d = 10
 # xa = u[:, 0:d] @ np.diag(np.sqrt(s[0:d]))
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
+# Node2Vec
 # p = 2
 # q = 0.5
 p = 1
@@ -260,71 +259,11 @@ xa = n2v_obj.fit_transform(A @ A.T)
 xa_pca = PCA(n_components=8).fit_transform(xa)
 # xa_umap = umap.UMAP(n_components=2).fit_transform(xa_pca)
 
-# ggvec_obj = nodevectors.GGVec(
-#     n_components=25,
-#     max_epoch=1000
-# )
-# xa = ggvec_obj.fit_transform(A)
-# xa_pca = PCA(n_components=8).fit_transform(xa)
-
-
-# def safe_inv_sqrt(a, tol=1e-12):
-#     """Computes the inverse square root, but returns zero if the result is either infinity
-#     or below a tolerance"""
-#     with np.errstate(divide="ignore"):
-#         b = 1 / np.sqrt(a)
-#     b[np.isinf(b)] = 0
-#     b[a < tol] = 0
-#     return b
-
-
-# def to_laplacian(A, regulariser=0):
-#     """Constructs the (regularised) symmetric Laplacian.
-#     """
-#     left_degrees = np.reshape(np.asarray(A.sum(axis=1)), (-1,))
-#     right_degrees = np.reshape(np.asarray(A.sum(axis=0)), (-1,))
-#     if regulariser == 'auto':
-#         regulariser = np.mean(np.concatenate((left_degrees, right_degrees)))
-#     left_degrees_inv_sqrt = safe_inv_sqrt(left_degrees + regulariser)
-#     right_degrees_inv_sqrt = safe_inv_sqrt(right_degrees + regulariser)
-#     L = sparse.diags(
-#         left_degrees_inv_sqrt) @ A @ sparse.diags(right_degrees_inv_sqrt)
-#     return L
-
-
-# # Construct (regularised) Laplacian matrix
-# L = to_laplacian(A, regulariser=100)
-# # L = A
-
-# # Compute spectral embedding
-# d = 8
-# L_vals, L_vecs = sparse.linalg.eigs(L, d*2 + 2)
-# idx = np.abs(L_vals).argsort()[::-1]
-# L_vals = L_vals[idx]
-# L_vecs = np.real(L_vecs[:, idx])
-
-# # Remove lamda = 1 eigenvalues (as Laplacian matrices always have these, dilation means there are two)
-# U = np.real(L_vecs[:, 0::2][:, 1:])
-# S = np.diag(abs(L_vals[0::2][1:]))
-# embedding = U @ LA.sqrtm(S)
-
-# # Divide by sqrt of node degree
-# degree_corrected_ya_vecs = []
-# degree = np.reshape(np.asarray(A.sum(axis=0)), (-1,))
-# for i in range(degree.shape[0]):
-#     if degree[i] > 10e-8:
-#         degree_corrected_ya_vecs.append(
-#             np.divide(embedding[i, :], np.sqrt(degree[i])))
-#     else:
-#         degree_corrected_ya_vecs.append(
-#             np.zeros(embedding[i, :].shape))
-
-# xa = np.vstack(degree_corrected_ya_vecs)
-# xa_umap = umap.UMAP(n_components=2).fit_transform(xa)
 
 # %%
-# # xadf = pd.DataFrame(xa_pca)
 xadf = pd.read_csv("final_xadf.csv")
+
+# # xadf = pd.DataFrame(xa_pca)
 # xadf.columns = ["Dimension {}".format(i+1) for i in range(xadf.shape[1])]
 # xadf["Country"] = countries
 # xadf["NATO Membership"] = np.where(
@@ -453,4 +392,23 @@ bar = px.bar(pacific_df, x="Country", y="GDP",
              #  plotly_default_colours[0], plotly_default_colours[3]],
              )
 bar.show()
+# %%
+plt.figure()
+for country_of_interest in xadf["Country"].values:
+    # country_of_interest = "China"
+    for country in [id_country[idx] for idx in np.where(A[country_id[country_of_interest], :] > 0)[0]]:
+        plt.plot([xadf[xadf["Country"] == country_of_interest]["Dimension 1"].values,
+                  xadf[xadf["Country"] == country]["Dimension 1"].values],
+                 [xadf[xadf["Country"] == country_of_interest]["Dimension 2"].values,
+                     xadf[xadf["Country"] == country]["Dimension 2"].values],
+                 c="grey",
+                 linewidth=0.3,
+                 linestyle="dashed"
+                 )
+
+        # if xadf[xadf["Country"] == country]["Dimension 1"].values[0] < 0:
+        # print(country)
+
+plt.savefig("all_connections.pdf")
+
 # %%
